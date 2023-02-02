@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="title">
+            <h1>
+                Импорт склада с Excel
+            </h1>
+        </div>
+        <div class="form-cotainer">
+            <div class="info-block">
+                <div class="info-left">
+                    <h3>Инструкция по импорту</h3>
+                    <p>
+                        Файл должен быть без заголовок во всех загрузках
+                    </p>
+                </div>
+                <div class="form-info-line"></div>
+                <div class="info-right">
+                    <img src="/assets/download.png" alt="download">
+                    <button class="button-ui-download">Скачать пример</button>
+                </div>
+            </div>
+            <!-- File upload form -->
+            <div id="formContentLoading">
+                <div class="form-content-loading">
+                    <img src="/assets/blue_delete.png" class="stop-button" id="stopButton" alt="blue-delete">
+                    <p class="progress-percent" id="progress-bar-title"></p>
+                    <div class="progress-bar-container">
+                        <div id="progress-bar" style="width: 0;
+                        height: 100%;
+                        background: #577BEC;
+                        border-radius: 10px;
+                    "></div>
+                    </div>
+                    <p class="progress-file-name" id="progressFileName">baza.xml</p>
+                </div>
+            </div>
+            <div id="formContentSuccess">
+                <div class="form-content-success">
+                    <img src="/assets/check-circle.png" alt="check">
+                    <p class='open-file-title-success'>Файл успешно загружен </p>
+                </div>
+            </div>
+            <form id="drag-drop-area" class="upload-form" enctype="multipart/form-data">
+                <input type="file" name="file" id="file-input" style="display: none;">
+                <div class="form-content" id="formContent">
+                    <img src="/assets/Upload.png" alt="upload">
+                    <p class='open-file-title' id="openFiletTitle">Перетащите или выберите <span
+                            id="open-file-input-button">файл для
+                            загрузки</span> </p>
+                    <p class='open-file-two' id="openFiletTitleTwo">Для начала загрузки отпустите файл</p>
+                </div>
+
+            </form>
+            <p id="file-upload-status"></p>
+            <div class="file-list-container" id="file-list">
+            </div>
+            <div class="file-upload-buttons">
+                <button class="file-upload-ui-button">Импорт</button>
+                <button class="file-upload-ui-button" disabled>Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.3.js"
+        integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#drag-drop-area').on('drag dragstart dragend dragover dragenter dragleave drop', function (
+                    event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                })
+                .on('dragover dragenter', function () {
+                    $(this).addClass('is-dragover');
+                    $('#openFiletTitle').hide()
+                    $('#openFiletTitleTwo').show()
+                })
+                .on('dragleave dragend drop', function () {
+                    $(this).removeClass('is-dragover');
+                    $('#openFiletTitle').show()
+                    $('#openFiletTitleTwo').hide()
+                })
+                .on('drop', function (event) {
+                    var file = event.originalEvent.dataTransfer.files[0];
+                    simulateFileUpload(file);
+                });
+
+            $('#file-input').on('change', function () {
+                var file = this.files[0];
+                simulateFileUpload(file);
+            });
+
+            $('#open-file-input-button').on('click', function () {
+                $('#file-input').click();
+            });
+        });
+
+
+
+        let isUploading = false;
+
+        function simulateFileUpload(file) {
+            let chunkSize = 100000;
+            let chunks = Math.ceil(file.size / chunkSize);
+            let currentChunk = 0;
+
+            isUploading = true;
+            $('#drag-drop-area').hide();
+            $('#formContentLoading').show();
+            $('#stopButton').show()
+
+            let reader = new FileReader();
+
+            function processNextChunk() {
+                let start = currentChunk * chunkSize;
+                let end = start + chunkSize >= file.size ? file.size : start + chunkSize;
+                let chunk = file.slice(start, end);
+
+                reader.readAsArrayBuffer(chunk);
+            }
+
+            reader.onload = function () {
+                currentChunk++;
+
+                let percentComplete = (currentChunk / chunks) * 100;
+                $('#progress-bar').width(percentComplete + '%');
+                $('#progress-bar-title').text(`Загружено ${percentComplete.toFixed(0)}%...`);
+                $('#progressFileName').text(`${file.name}`)
+
+                if (currentChunk < chunks) {
+                    setTimeout(processNextChunk, 100);
+                } else {
+                    $('#formContentLoading').hide();
+                    $('#stopButton').hide()
+                    $('#formContentSuccess').show();
+                    setTimeout(function () {
+                        $('#formContentSuccess').hide(400);
+                        $('#drag-drop-area').show(400);
+                        displayFile(file);
+                    }, 2000);
+                    isUploading = false;
+                }
+            };
+
+            reader.onerror = function (error) {
+                $('#file-upload-status').text('File upload failed.');
+                console.error(error);
+                isUploading = false;
+            };
+
+            processNextChunk();
+        }
+
+        function displayFile(file) {
+            let fileName = file.name;
+            let fileSize = formatBytes(file.size);
+
+            let fileElement = $('<div>').attr('class', 'list').append(
+                ` <div class="list-container"><img src='/assets/flat-color-icons_document.png' /> <p class='file-name'>${fileName}</p> <span class='file-name'>${fileSize}</span></div>`
+            );
+            let deleteButton = $('<img>').attr('src', '/assets/delete.png').attr('class', 'file-delete').click(
+                function () {
+                    fileElement.remove();
+                    deleteButton.remove()
+                    $('#file-upload-status').text('');
+                    $('#progress-bar').width(0);
+                });
+            fileElement.append(deleteButton)
+            $('#file-list').append(fileElement)
+            // $('#file-list').append(deleteButton);
+        }
+
+
+
+        function formatBytes(bytes) {
+            var marker = 1024;
+            var decimal = 0;
+            var kiloBytes = marker;
+            var megaBytes = marker * marker;
+            var gigaBytes = marker * marker * marker;
+            var teraBytes = marker * marker * marker * marker;
+
+            if (bytes < kiloBytes) return bytes + " Bytes";
+            else if (bytes < megaBytes) return (bytes / kiloBytes).toFixed(decimal) + " KB";
+            else if (bytes < gigaBytes) return (bytes / megaBytes).toFixed(decimal) + " MB";
+            else return (bytes / gigaBytes).toFixed(decimal) + " GB";
+        }
+    </script>
+</body>
+
+</html>
+
+<!-- Progress bar -->
+<!-- <div class="progress">
+                <div class="progress-bar"></div>
+            </div> -->
+<!-- Display upload status -->
+<!-- <div id="uploadStatus"></div> -->
+
+<!-- let isUploading = false;
+
+function handleFileUpload(file) {
+  isUploading = true;
+  $('#file-upload-status').text('Uploading...');
+  $('#drag-drop-zone').hide();
+  $('#loading-indicator').show();
+
+  let reader = new FileReader();
+  reader.onload = function () {
+    isUploading = false;
+    $('#loading-indicator').hide();
+    $('#file-upload-status').text('File uploaded successfully.');
+    $('#drag-drop-zone').show();
+  };
+
+  reader.onerror = function (error) {
+    isUploading = false;
+    $('#loading-indicator').hide();
+    $('#file-upload-status').text('File upload failed.');
+    $('#drag-drop-zone').show();
+    console.error(error);
+  };
+
+  reader.readAsDataURL(file);
+} -->

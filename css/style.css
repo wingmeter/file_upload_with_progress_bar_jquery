@@ -1,0 +1,388 @@
+@import url('https://fonts.cdnfonts.com/css/sf-pro-display');
+
+
+body {
+    font-family: 'SF Pro Display', sans-serif;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+ul,
+ol {
+    padding: 0;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+ul,
+ol,
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+    margin: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+.container {
+    margin: 100px auto;
+    width: 600px;
+    height: 400px;
+}
+
+.title {
+    background: #F5F6FA;
+    border-radius: 10px 10px 0 0;
+    padding: 15px 180px;
+}
+
+.title h1 {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 21px;
+
+    color: #222222;
+}
+
+.form-cotainer {
+    padding: 25px 80px;
+    display: flex;
+    flex-direction: column;
+    background: #fafafb;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.form-cotainer .info-block {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.form-cotainer .info-block .info-left {
+    display: flex;
+    flex-direction: column;
+    width: 190px;
+    gap: 6px;
+}
+
+.form-cotainer .info-block .info-left h3 {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 100%;
+    color: #222222;
+}
+
+.form-cotainer .info-block .info-left p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #7F8A95;
+}
+
+.form-info-line {
+    border: 1px solid #E9EEFC;
+    margin-right: 32px;
+}
+
+.button-ui-download {
+    background: none;
+    border: none;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 100%;
+    text-transform: lowercase;
+    color: #577BEC;
+    cursor: pointer;
+}
+
+.button-ui-download:hover {
+    color: #3251b7;
+}
+
+.form-cotainer .info-block .info-right {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.form-cotainer .info-block .info-right img {
+    width: 12px;
+    height: 12px;
+}
+
+.upload-form {
+    border: 1px dashed #E8E8E8;
+    border-radius: 5px;
+    width: 100%;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+    margin-bottom: 25px;
+    margin: 0 auto;
+}
+
+.upload-form.is-dragover {
+    background: #EFF3FE;
+    border-radius: 5px;
+}
+
+.upload-form.is-dragover .form-content p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #577BEC;
+}
+
+.open-file-two {
+    display: none;
+}
+
+
+.upload-form .form-content {
+    text-align: center;
+}
+
+.upload-form .form-content .open-file-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #001737;
+}
+
+.upload-form .form-content span {
+    color: #577BEC;
+    cursor: pointer;
+}
+
+.upload-form .form-content span:hover {
+    color: #3251b7;
+}
+
+.upload-form img {
+    width: 36px;
+    height: 45px;
+
+}
+
+/* Loading */
+
+#formContentLoading {
+    display: none;
+}
+
+.form-content-loading {
+    background: #EFF3FE;
+    border-radius: 5px;
+    width: 100%;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 25px;
+    margin: 0 auto;
+}
+
+.form-content-loading .stop-button {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    right: 4px;
+    top: 4px;
+    cursor: pointer;
+    display: none;
+}
+
+.form-content-loading .progress-percent {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #577BEC;
+}
+
+.progress-bar-container {
+    margin: 15px auto 0 auto;
+    width: 266px;
+    height: 7px;
+    background: rgba(146, 168, 228, 0.25);
+    border-radius: 10px;
+}
+
+.progress-file-name {
+    margin-top: 15px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #577BEC;
+}
+
+/* End  */
+
+
+
+.file-upload-buttons {
+    display: flex;
+    gap: 9px;
+}
+
+.file-upload-ui-button {
+    width: 100%;
+    padding: 10px;
+    background: #C7DEF4;
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+    color: #124879;
+    border: none;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.file-upload-ui-button:hover {
+    background: #a0c3e3;
+}
+
+.file-upload-ui-button:disabled {
+    background: #E9EBF0;
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+    color: #A1A1A6;
+    cursor: not-allowed;
+}
+
+.list-container {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.list-container img {
+    width: 20px;
+    height: 20px;
+}
+
+.list-container p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #001737
+}
+
+.file-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 25px;
+    margin-top: 20px;
+}
+
+.list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#file-list .file-delete {
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+}
+
+.list-container span {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #9D9D9D
+}
+
+/* Success */
+#formContentSuccess {
+    display: none;
+}
+
+.form-content-success {
+    background: #e7f5ef;
+    border-radius: 5px;
+    width: 100%;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 25px;
+    margin: 0 auto;
+}
+
+.form-content-success img {
+    width: 40px;
+    height: 40px;
+}
+
+.form-content-success p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #5AB98F;
+}
